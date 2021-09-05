@@ -135,15 +135,17 @@ public class Main {
 
     // Герой Golem
     public static void golemReduce() {
-        if (heroesHealth[4] > 0) {
-            for (int i = 0; i < heroesHealth.length; i++) {
-                heroesHealth[i] = heroesHealth[i] + (bossDamage * 0.2);
-                if (golemDontReduceMe == true) {
-                    heroesHealth[5] = heroesHealth[5] - (bossDamage * 0.2);
-                    golemDontReduceMe = false;
+        if (bossStunned == false) {
+            if (heroesHealth[4] > 0) {
+                for (int i = 0; i < heroesHealth.length; i++) {
+                    heroesHealth[i] = heroesHealth[i] + (bossDamage * 0.2);
+                    if (golemDontReduceMe == true) {
+                        heroesHealth[5] = heroesHealth[5] - (bossDamage * 0.2);
+                        golemDontReduceMe = false;
+                    }
                 }
+                heroesHealth[4] = heroesHealth[4] - ((bossDamage * 0.2) * 2);
             }
-            heroesHealth[4] = heroesHealth[4] - ((bossDamage * 0.2) * 2);
         }
     }
 
@@ -155,13 +157,15 @@ public class Main {
         int luckMax = 100;
         int luckysLuck = luckMin + (int) (Math.random() * ((luckMax - luckMin) + 1));
 
-        if (luckysLuck > 70) { // Он уклоняется с вероятностью 30% (наверное)
-            golemDontReduceMe = true;
+        if (bossStunned == false) {
+            if (luckysLuck > 70) { // Он уклоняется с вероятностью 30% (наверное)
+                golemDontReduceMe = true;
 
-            heroesHealth[5] = heroesHealth[5] + bossDamage;
-            System.out.println("========== DODGE ==========");
-            System.out.println("Lucky dodged his attack!");
-            System.out.println("===========================");
+                heroesHealth[5] = heroesHealth[5] + bossDamage;
+                System.out.println("========== DODGE ==========");
+                System.out.println("Lucky dodged his attack!");
+                System.out.println("===========================");
+            }
         }
     }
 
@@ -171,17 +175,19 @@ public class Main {
         int blockMax = 30;
         int hitBlock = blockMin + (int) (Math.random() * ((blockMax - blockMin) + 1));
 
-        if (hitBlock > 0) {
-            heroesHealth[6] = heroesHealth[6] + hitBlock;
-            heroesDamage[6] = heroesDamage[6] + hitBlock;
-            System.out.println("============= HIT BLOCK =============");
-            System.out.println("Berserk blocked " + hitBlock + " damage and deals " + hitBlock + " more damage to boss");
-            System.out.println("=====================================");
-            heroesDamage[6] = 25;
-        } else {
-            System.out.println("============= HIT BLOCK =============");
-            System.out.println("bruh. Berserk didn't block his damage");
-            System.out.println("=====================================");
+        if (bossStunned == false) {
+            if (hitBlock > 0) {
+                heroesHealth[6] = heroesHealth[6] + hitBlock;
+                heroesDamage[6] = heroesDamage[6] + hitBlock;
+                System.out.println("============= HIT BLOCK =============");
+                System.out.println("Berserk blocked " + hitBlock + " damage and deals " + hitBlock + " more damage to boss");
+                System.out.println("=====================================");
+                heroesDamage[6] = 25;
+            } else {
+                System.out.println("============= HIT BLOCK =============");
+                System.out.println("bruh. Berserk didn't block his damage");
+                System.out.println("=====================================");
+            }
         }
     }
 
@@ -204,6 +210,7 @@ public class Main {
 
     // Приношение босса в порядок
     public static int stunnedForRounds = 2;
+
     public static void bossIsOK() {
         if (bossStunned == true) {
             stunnedForRounds--;
