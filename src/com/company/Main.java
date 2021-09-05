@@ -5,13 +5,13 @@ import java.util.Random;
 public class Main {
 
     public static int roundNumber = 1;
-    public static int bossHealth = 700;
+    public static int bossHealth = 2000;
     public static int bossDamage = 50;
     public static String bossDefence = "";
     public static String[] heroesAttackType = {
-            "Physical", "Magical", "Kinetic", "Medic", "Golem", "Lucky", "Berserk"};
-    public static double[] heroesHealth = {260, 270, 250, 300, 400, 150, 280};
-    public static int[] heroesDamage = {15, 20, 25, 0, 5, 20, 25};
+            "Physical", "Magical", "Kinetic", "Medic", "Golem", "Lucky", "Berserk", "Thor"};
+    public static double[] heroesHealth = {260, 270, 250, 300, 400, 150, 280, 200};
+    public static int[] heroesDamage = {15, 20, 25, 0, 5, 20, 25, 20};
 
     public static void main(String[] args) {
         printStatistics();
@@ -53,13 +53,14 @@ public class Main {
 
     public static void round() {
         System.out.println("ROUND: " + roundNumber);
+        bossIsOK();
         chooseBossDefence();
         bossHits();
         berserksHitBlock();
-
         luckysDodge();
         golemReduce();
         heroesHit();
+        thorsStunning();
         medicsHeal();
         printStatistics();
         roundNumber++;
@@ -90,12 +91,14 @@ public class Main {
     }
 
     public static void bossHits() {
-        for (int i = 0; i < heroesHealth.length; i++) {
-            if (heroesHealth[i] > 0) {
-                if (heroesHealth[i] - bossDamage < 0) {
-                    heroesHealth[i] = 0;
-                } else {
-                    heroesHealth[i] = heroesHealth[i] - bossDamage;
+        if (bossStunned == false) {
+            for (int i = 0; i < heroesHealth.length; i++) {
+                if (heroesHealth[i] > 0) {
+                    if (heroesHealth[i] - bossDamage < 0) {
+                        heroesHealth[i] = 0;
+                    } else {
+                        heroesHealth[i] = heroesHealth[i] - bossDamage;
+                    }
                 }
             }
         }
@@ -103,7 +106,7 @@ public class Main {
 
     public static void printStatistics() {
         System.out.println("============== STATS ==============");
-        System.out.println("Boss Health: " + bossHealth + "; Boss Damage: " + bossDamage);
+        System.out.println("Boss Health: " + bossHealth + "; Boss Damage: " + bossDamage + "; Stunned: " + bossStunned);
         for (int i = 0; i < heroesHealth.length; i++) {
             System.out.println(
                     heroesAttackType[i] + " Health: " + heroesHealth[i] + "; " + heroesAttackType[i] + " Damage: " + heroesDamage[i]);
@@ -146,6 +149,7 @@ public class Main {
 
     // Герой Lucky
     public static boolean golemDontReduceMe = false; // Чтобы Golem не защищал Lucky после его уклона
+
     public static void luckysDodge() {
         int luckMin = 0;
         int luckMax = 100;
@@ -178,6 +182,40 @@ public class Main {
             System.out.println("============= HIT BLOCK =============");
             System.out.println("bruh. Berserk didn't block his damage");
             System.out.println("=====================================");
+        }
+    }
+
+    // Герой Thor
+    public static boolean bossStunned = false;
+
+    public static void thorsStunning() {
+        Random random = new Random();
+        boolean canStun = random.nextBoolean();
+
+        if (canStun == true) {
+            stunnedForRounds = 2;
+            bossStunned = true;
+
+            System.out.println("============== STUNNED ==============");
+            System.out.println("Boss stunned by Thor for one round!");
+            System.out.println("=====================================");
+        }
+    }
+
+    // Приношение босса в порядок
+    public static int stunnedForRounds = 2;
+    public static void bossIsOK() {
+        if (bossStunned == true) {
+            stunnedForRounds--;
+        }
+        if (stunnedForRounds == 0) {
+            bossStunned = false;
+
+            System.out.println(" ");
+            System.out.println("======== THE BOSS IS BACK! ========");
+            System.out.println(" ");
+
+            stunnedForRounds = 2;
         }
     }
 }
