@@ -9,9 +9,9 @@ public class Main {
     public static int bossDamage = 50;
     public static String bossDefence = "";
     public static String[] heroesAttackType = {
-            "Physical", "Magical", "Kinetic", "Medic", "Golem"};
-    public static double[] heroesHealth = {260, 270, 250, 300, 400};
-    public static int[] heroesDamage = {15, 20, 25, 0, 5};
+            "Physical", "Magical", "Kinetic", "Medic", "Golem", "Lucky"};
+    public static double[] heroesHealth = {260, 270, 250, 300, 400, 150};
+    public static int[] heroesDamage = {15, 20, 25, 0, 5, 20};
 
     public static void main(String[] args) {
         printStatistics();
@@ -55,6 +55,7 @@ public class Main {
         System.out.println("ROUND: " + roundNumber);
         chooseBossDefence();
         bossHits();
+        luckysDodge();
         golemReduce();
         heroesHit();
         medicsHeal();
@@ -132,8 +133,29 @@ public class Main {
         if (heroesHealth[4] > 0) {
             for (int i = 0; i < heroesHealth.length; i++) {
                 heroesHealth[i] = heroesHealth[i] + (bossDamage * 0.2);
+                if (golemDontReduceMe == true) {
+                    heroesHealth[5] = heroesHealth[5] - (bossDamage * 0.2);
+                    golemDontReduceMe = false;
+                }
             }
             heroesHealth[4] = heroesHealth[4] - ((bossDamage * 0.2) * 2);
+        }
+    }
+
+    // Герой Lucky
+    public static boolean golemDontReduceMe = false; // Чтобы Golem не защищал Lucky после его уклона
+    public static void luckysDodge() {
+        int luckMin = 0;
+        int luckMax = 100;
+        int luckysLuck = luckMin + (int) (Math.random() * ((luckMax - luckMin) + 1));
+
+        if (luckysLuck > 70) { // Он уклоняется с вероятностью 30% (наверное)
+            golemDontReduceMe = true;
+
+            heroesHealth[5] = heroesHealth[5] + bossDamage;
+            System.out.println("========== DODGE ==========");
+            System.out.println("Lucky dodged his attack!");
+            System.out.println("===========================");
         }
     }
 }
