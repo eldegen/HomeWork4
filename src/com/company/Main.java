@@ -9,9 +9,9 @@ public class Main {
     public static int bossDamage = 50;
     public static String bossDefence = "";
     public static String[] heroesAttackType = {
-            "Physical", "Magical", "Kinetic", "Medic", "Golem", "Lucky"};
-    public static double[] heroesHealth = {260, 270, 250, 300, 400, 150};
-    public static int[] heroesDamage = {15, 20, 25, 0, 5, 20};
+            "Physical", "Magical", "Kinetic", "Medic", "Golem", "Lucky", "Berserk"};
+    public static double[] heroesHealth = {260, 270, 250, 300, 400, 150, 280};
+    public static int[] heroesDamage = {15, 20, 25, 0, 5, 20, 25};
 
     public static void main(String[] args) {
         printStatistics();
@@ -55,6 +55,8 @@ public class Main {
         System.out.println("ROUND: " + roundNumber);
         chooseBossDefence();
         bossHits();
+        berserksHitBlock();
+
         luckysDodge();
         golemReduce();
         heroesHit();
@@ -156,6 +158,26 @@ public class Main {
             System.out.println("========== DODGE ==========");
             System.out.println("Lucky dodged his attack!");
             System.out.println("===========================");
+        }
+    }
+
+    // Герой Berserk
+    public static void berserksHitBlock() {
+        int blockMin = 0;
+        int blockMax = 30;
+        int hitBlock = blockMin + (int) (Math.random() * ((blockMax - blockMin) + 1));
+
+        if (hitBlock > 0) {
+            heroesHealth[6] = heroesHealth[6] + hitBlock;
+            heroesDamage[6] = heroesDamage[6] + hitBlock;
+            System.out.println("============= HIT BLOCK =============");
+            System.out.println("Berserk blocked " + hitBlock + " damage and deals " + hitBlock + " more damage to boss");
+            System.out.println("=====================================");
+            heroesDamage[6] = 25;
+        } else {
+            System.out.println("============= HIT BLOCK =============");
+            System.out.println("bruh. Berserk didn't block his damage");
+            System.out.println("=====================================");
         }
     }
 }
