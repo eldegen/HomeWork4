@@ -9,9 +9,9 @@ public class Main {
     public static int bossDamage = 50;
     public static String bossDefence = "";
     public static String[] heroesAttackType = {
-            "Physical", "Magical", "Kinetic", "Medic"};
-    public static int[] heroesHealth = {260, 270, 250, 400};
-    public static int[] heroesDamage = {15, 20, 25, 0};
+            "Physical", "Magical", "Kinetic", "Medic", "Golem"};
+    public static double[] heroesHealth = {260, 270, 250, 300, 400};
+    public static int[] heroesDamage = {15, 20, 25, 0, 5};
 
     public static void main(String[] args) {
         printStatistics();
@@ -55,6 +55,7 @@ public class Main {
         System.out.println("ROUND: " + roundNumber);
         chooseBossDefence();
         bossHits();
+        golemReduce();
         heroesHit();
         medicsHeal();
         printStatistics();
@@ -121,6 +122,18 @@ public class Main {
                 System.out.println("=================================");
                 break;
             }
+        }
+    }
+
+    // Задание на сообразительность
+
+    // Герой Golem
+    public static void golemReduce() {
+        if (heroesHealth[4] > 0) {
+            for (int i = 0; i < heroesHealth.length; i++) {
+                heroesHealth[i] = heroesHealth[i] + (bossDamage * 0.2);
+            }
+            heroesHealth[4] = heroesHealth[4] - ((bossDamage * 0.2) * 2);
         }
     }
 }
